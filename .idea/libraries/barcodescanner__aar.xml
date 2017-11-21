@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="barcodescanner:@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/barcodescanner.aar/51c346ac223fe3f7803258e4cad94d1c/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/barcodescanner.aar/51c346ac223fe3f7803258e4cad94d1c/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
