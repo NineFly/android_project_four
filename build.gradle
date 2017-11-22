@@ -39,6 +39,7 @@ allprojects {
     repositories {
         mavenCentral();
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -253,6 +254,8 @@ dependencies {
     releaseCompile(project(path: "CordovaLib", configuration: "release"))
     compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
+    compile 'com.shizhefei:LargeImageView:1.0.9'//支持展示高清图片，例如：10000*10000；
+    compile 'com.github.eralpyucel:CircleProgressView:v1.1'//圆形进度条
 }
 
 def promptForReleaseKeyPassword() {
