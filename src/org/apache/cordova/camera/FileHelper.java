@@ -45,7 +45,7 @@ public class FileHelper {
      * If the given URI string represents a content:// URI, the real path is retrieved from the media store.
      *
      * @param uriString the URI string of the audio/image/video
-     * @param cordova the current application context
+     * @param cordova   the current application context
      * @return the full path to the file
      */
     @SuppressWarnings("deprecation")
@@ -55,7 +55,7 @@ public class FileHelper {
         if (Build.VERSION.SDK_INT < 11)
             realPath = FileHelper.getRealPathFromURI_BelowAPI11(cordova.getActivity(), uri);
 
-        // SDK >= 11
+            // SDK >= 11
         else
             realPath = FileHelper.getRealPathFromURI_API11_And_Above(cordova.getActivity(), uri);
 
@@ -66,7 +66,7 @@ public class FileHelper {
      * Returns the real path of the given URI.
      * If the given URI is a content:// URI, the real path is retrieved from the media store.
      *
-     * @param uri the URI of the audio/image/video
+     * @param uri     the URI of the audio/image/video
      * @param cordova the current application context
      * @return the full path to the file
      */
@@ -118,7 +118,7 @@ public class FileHelper {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -143,7 +143,7 @@ public class FileHelper {
     }
 
     public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
+        String[] proj = {MediaStore.Images.Media.DATA};
         String result = null;
 
         try {
@@ -162,7 +162,7 @@ public class FileHelper {
      * Returns an input stream based on given URI string.
      *
      * @param uriString the URI string from which to obtain the input stream
-     * @param cordova the current application context
+     * @param cordova   the current application context
      * @return an input stream into the data at the given URI or null if given an invalid URI string
      * @throws IOException
      */
@@ -225,7 +225,7 @@ public class FileHelper {
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
-    
+
     /**
      * Returns the mime type of the data specified by the given URI string.
      *
@@ -249,9 +249,9 @@ public class FileHelper {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke

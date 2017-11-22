@@ -1,31 +1,30 @@
 /**
  * PhoneGap is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- *
+ * <p>
  * Copyright (c) Matt Kane 2010
  * Copyright (c) 2011, IBM Corporation
  * Copyright (c) 2013, Maciej Nux Jaros
  */
 package com.phonegap.plugins.barcodescanner;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.content.pm.PackageManager;
-
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
-import org.apache.cordova.PermissionHelper;
+import android.util.Log;
 
 import com.google.zxing.client.android.CaptureActivity;
-import com.google.zxing.client.android.encode.EncodeActivity;
 import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.encode.EncodeActivity;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PermissionHelper;
+import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This calls out to the ZXing barcode reader and returns the result.
@@ -54,7 +53,7 @@ public class BarcodeScanner extends CordovaPlugin {
 
     private static final String LOG_TAG = "BarcodeScanner";
 
-    private String [] permissions = { Manifest.permission.CAMERA };
+    private String[] permissions = {Manifest.permission.CAMERA};
 
     private JSONArray requestArgs;
     private CallbackContext callbackContext;
@@ -77,7 +76,7 @@ public class BarcodeScanner extends CordovaPlugin {
      * @param action          The action to execute.
      * @param args            The exec() arguments.
      * @param callbackContext The callback context used when calling back into JavaScript.
-     * @return                Whether the action was valid.
+     * @return Whether the action was valid.
      *
      * @sa https://github.com/apache/cordova-android/blob/master/framework/src/org/apache/cordova/CordovaPlugin.java
      */
@@ -110,10 +109,10 @@ public class BarcodeScanner extends CordovaPlugin {
         } else if (action.equals(SCAN)) {
 
             //android permission auto add
-            if(!hasPermisssion()) {
-              requestPermissions(0);
+            if (!hasPermisssion()) {
+                requestPermissions(0);
             } else {
-              scan(args);
+                scan(args);
             }
         } else {
             return false;
@@ -252,16 +251,14 @@ public class BarcodeScanner extends CordovaPlugin {
     /**
      * check application's permissions
      */
-   public boolean hasPermisssion() {
-       for(String p : permissions)
-       {
-           if(!PermissionHelper.hasPermission(this, p))
-           {
-               return false;
-           }
-       }
-       return true;
-   }
+    public boolean hasPermisssion() {
+        for (String p : permissions) {
+            if (!PermissionHelper.hasPermission(this, p)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * We override this so that we can access the permissions variable, which no longer exists in
@@ -269,37 +266,34 @@ public class BarcodeScanner extends CordovaPlugin {
      *
      * @param requestCode The code to get request action
      */
-   public void requestPermissions(int requestCode)
-   {
-       PermissionHelper.requestPermissions(this, requestCode, permissions);
-   }
+    public void requestPermissions(int requestCode) {
+        PermissionHelper.requestPermissions(this, requestCode, permissions);
+    }
 
-   /**
-   * processes the result of permission request
-   *
-   * @param requestCode The code to get request action
-   * @param permissions The collection of permissions
-   * @param grantResults The result of grant
-   */
-  public void onRequestPermissionResult(int requestCode, String[] permissions,
-                                         int[] grantResults) throws JSONException
-   {
-       PluginResult result;
-       for (int r : grantResults) {
-           if (r == PackageManager.PERMISSION_DENIED) {
-               Log.d(LOG_TAG, "Permission Denied!");
-               result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
-               this.callbackContext.sendPluginResult(result);
-               return;
-           }
-       }
+    /**
+     * processes the result of permission request
+     *
+     * @param requestCode The code to get request action
+     * @param permissions The collection of permissions
+     * @param grantResults The result of grant
+     */
+    public void onRequestPermissionResult(int requestCode, String[] permissions,
+                                          int[] grantResults) throws JSONException {
+        PluginResult result;
+        for (int r : grantResults) {
+            if (r == PackageManager.PERMISSION_DENIED) {
+                Log.d(LOG_TAG, "Permission Denied!");
+                result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
+                this.callbackContext.sendPluginResult(result);
+                return;
+            }
+        }
 
-       switch(requestCode)
-       {
-           case 0:
-               scan(this.requestArgs);
-               break;
-       }
-   }
+        switch (requestCode) {
+            case 0:
+                scan(this.requestArgs);
+                break;
+        }
+    }
 
 }

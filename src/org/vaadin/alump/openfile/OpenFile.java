@@ -36,73 +36,73 @@ import org.json.JSONException;
  */
 public class OpenFile extends CordovaPlugin {
 
-  private static final String OPEN_ACTION = "open";
-  private static final String TAG = OpenFile.class.getSimpleName();
+    private static final String OPEN_ACTION = "open";
+    private static final String TAG = OpenFile.class.getSimpleName();
 
-  @Override
-  public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-    super.initialize(cordova, webView);
-    Log.d(TAG, "Initialized");
-  }
-
-  @Override
-  public boolean execute(String action, JSONArray jsonArgs,
-      CallbackContext callback) throws JSONException {
-    if (OPEN_ACTION.equals(action)) {
-      final String uri = jsonArgs.getString(0);
-      findIntent(uri, callback);
-    } else {
-      Log.w(TAG, "Unknown command '" + action + "' ignored.");
-      return false;
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        Log.d(TAG, "Initialized");
     }
 
-    return true;
-  }
+    @Override
+    public boolean execute(String action, JSONArray jsonArgs,
+                           CallbackContext callback) throws JSONException {
+        if (OPEN_ACTION.equals(action)) {
+            final String uri = jsonArgs.getString(0);
+            findIntent(uri, callback);
+        } else {
+            Log.w(TAG, "Unknown command '" + action + "' ignored.");
+            return false;
+        }
 
-  private void findIntent(String uri, CallbackContext callback) {
-    if (uri == null || uri.isEmpty()) {
-      final String error = "Invalid path "
-          + (uri == null ? "null" : ("'" + uri + "'")) + " received.";
-      Log.e(TAG, error);
-      callback.error(error);
-      return;
+        return true;
     }
 
-    try {
-      Uri realUri = Uri.parse(uri);
-      String mime = getMimeTypeFromExtension(uri);
-      Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+    private void findIntent(String uri, CallbackContext callback) {
+        if (uri == null || uri.isEmpty()) {
+            final String error = "Invalid path "
+                    + (uri == null ? "null" : ("'" + uri + "'")) + " received.";
+            Log.e(TAG, error);
+            callback.error(error);
+            return;
+        }
 
-      if (Build.VERSION.SDK_INT >= 16) {
-        fileIntent.setDataAndTypeAndNormalize(realUri, mime);
-      } else {
-        fileIntent.setDataAndType(realUri, mime);
-      }
+        try {
+            Uri realUri = Uri.parse(uri);
+            String mime = getMimeTypeFromExtension(uri);
+            Intent fileIntent = new Intent(Intent.ACTION_VIEW);
 
-      Log.d(TAG, "Starting activity for '" + uri + "'...");
-      cordova.getActivity().startActivity(fileIntent);
+            if (Build.VERSION.SDK_INT >= 16) {
+                fileIntent.setDataAndTypeAndNormalize(realUri, mime);
+            } else {
+                fileIntent.setDataAndType(realUri, mime);
+            }
 
-    } catch (ActivityNotFoundException e) {
-      final String error = "Failed to find activity for '" + uri + "'";
-      Log.e(TAG, error, e);
-      callback.error(error + ": " + e.getMessage());
+            Log.d(TAG, "Starting activity for '" + uri + "'...");
+            cordova.getActivity().startActivity(fileIntent);
+
+        } catch (ActivityNotFoundException e) {
+            final String error = "Failed to find activity for '" + uri + "'";
+            Log.e(TAG, error, e);
+            callback.error(error + ": " + e.getMessage());
+        }
+
+        callback.success();
     }
 
-    callback.success();
-  }
+    private String getMimeTypeFromExtension(String uri) {
+        String mimeType = null;
 
-  private String getMimeTypeFromExtension(String uri) {
-    String mimeType = null;
+        final String extension = MimeTypeMap.getFileExtensionFromUrl(uri);
+        if (extension != null) {
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    extension);
+            Log.d(TAG, "Mime type resolved as " + mimeType);
+        } else {
+            Log.w(TAG, "Failed to resolve extension from " + uri);
+        }
 
-    final String extension = MimeTypeMap.getFileExtensionFromUrl(uri);
-    if (extension != null) {
-      mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-          extension);
-      Log.d(TAG, "Mime type resolved as " + mimeType);
-    } else {
-      Log.w(TAG, "Failed to resolve extension from " + uri);
+        return mimeType;
     }
-
-    return mimeType;
-  }
 }

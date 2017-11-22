@@ -19,9 +19,6 @@
 package org.apache.cordova;
 
 import org.json.JSONArray;
-
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.PluginResult;
 import org.json.JSONObject;
 
 public class CallbackContext {
@@ -64,7 +61,7 @@ public class CallbackContext {
     /**
      * Helper for success callbacks that just returns the Status.OK by default
      *
-     * @param message           The message to add to the success result.
+     * @param message The message to add to the success result.
      */
     public void success(JSONObject message) {
         sendPluginResult(new PluginResult(PluginResult.Status.OK, message));
@@ -73,7 +70,7 @@ public class CallbackContext {
     /**
      * Helper for success callbacks that just returns the Status.OK by default
      *
-     * @param message           The message to add to the success result.
+     * @param message The message to add to the success result.
      */
     public void success(String message) {
         sendPluginResult(new PluginResult(PluginResult.Status.OK, message));
@@ -82,7 +79,7 @@ public class CallbackContext {
     /**
      * Helper for success callbacks that just returns the Status.OK by default
      *
-     * @param message           The message to add to the success result.
+     * @param message The message to add to the success result.
      */
     public void success(JSONArray message) {
         sendPluginResult(new PluginResult(PluginResult.Status.OK, message));
@@ -91,7 +88,7 @@ public class CallbackContext {
     /**
      * Helper for success callbacks that just returns the Status.OK by default
      *
-     * @param message           The message to add to the success result.
+     * @param message The message to add to the success result.
      */
     public void success(byte[] message) {
         sendPluginResult(new PluginResult(PluginResult.Status.OK, message));
@@ -100,7 +97,7 @@ public class CallbackContext {
     /**
      * Helper for success callbacks that just returns the Status.OK by default
      *
-     * @param message           The message to add to the success result.
+     * @param message The message to add to the success result.
      */
     public void success(int message) {
         sendPluginResult(new PluginResult(PluginResult.Status.OK, message));
@@ -116,7 +113,7 @@ public class CallbackContext {
     /**
      * Helper for error callbacks that just returns the Status.ERROR by default
      *
-     * @param message           The message to add to the error result.
+     * @param message The message to add to the error result.
      */
     public void error(JSONObject message) {
         sendPluginResult(new PluginResult(PluginResult.Status.ERROR, message));
@@ -125,7 +122,7 @@ public class CallbackContext {
     /**
      * Helper for error callbacks that just returns the Status.ERROR by default
      *
-     * @param message           The message to add to the error result.
+     * @param message The message to add to the error result.
      */
     public void error(String message) {
         sendPluginResult(new PluginResult(PluginResult.Status.ERROR, message));
@@ -134,7 +131,7 @@ public class CallbackContext {
     /**
      * Helper for error callbacks that just returns the Status.ERROR by default
      *
-     * @param message           The message to add to the error result.
+     * @param message The message to add to the error result.
      */
     public void error(int message) {
         sendPluginResult(new PluginResult(PluginResult.Status.ERROR, message));

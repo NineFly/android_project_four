@@ -18,10 +18,10 @@
 */
 package org.apache.cordova;
 
-import java.security.SecureRandom;
-
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.security.SecureRandom;
 
 /**
  * Contains APIs that the JS can call. All functions in here should also have
@@ -100,7 +100,9 @@ public class CordovaBridge {
         return true;
     }
 
-    /** Called on page transitions */
+    /**
+     * Called on page transitions
+     */
     void clearBridgeSecret() {
         expectedBridgeSecret = -1;
     }
@@ -109,7 +111,9 @@ public class CordovaBridge {
         return expectedBridgeSecret != -1;
     }
 
-    /** Called by cordova.js to initialize the bridge. */
+    /**
+     * Called by cordova.js to initialize the bridge.
+     */
     int generateBridgeSecret() {
         SecureRandom randGen = new SecureRandom();
         expectedBridgeSecret = randGen.nextInt(Integer.MAX_VALUE);
@@ -144,7 +148,7 @@ public class CordovaBridge {
             try {
                 int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
                 jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -161,8 +165,7 @@ public class CordovaBridge {
                 e.printStackTrace();
             }
             return "";
-        }
-        else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
+        } else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
             // Protect against random iframes being able to talk through the bridge.
             // Trust only pages which the app would have been allowed to navigate to anyway.
             if (pluginManager.shouldAllowBridgeAccess(origin)) {
@@ -171,7 +174,7 @@ public class CordovaBridge {
                 jsMessageQueue.setBridgeMode(bridgeMode);
                 // Tell JS the bridge secret.
                 int secret = generateBridgeSecret();
-                return ""+secret;
+                return "" + secret;
             } else {
                 LOG.e(LOG_TAG, "gap_init called from restricted origin: " + origin);
             }

@@ -66,8 +66,8 @@ public class FileUploadResult {
     public JSONObject toJSONObject() throws JSONException {
         return new JSONObject(
                 "{bytesSent:" + bytesSent +
-                ",responseCode:" + responseCode +
-                ",response:" + JSONObject.quote(response) +
-                ",objectId:" + JSONObject.quote(objectId) + "}");
+                        ",responseCode:" + responseCode +
+                        ",response:" + JSONObject.quote(response) +
+                        ",objectId:" + JSONObject.quote(objectId) + "}");
     }
 }

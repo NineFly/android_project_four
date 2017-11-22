@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sibu_android.iml" filepath="$PROJECT_DIR$/sibu_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CordovaLib/CordovaLib.iml" filepath="$PROJECT_DIR$/CordovaLib/CordovaLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/four_android.iml" filepath="$PROJECT_DIR$/four_android.iml" />
     </modules>
   </component>
 </project>

@@ -19,14 +19,11 @@
 
 package org.apache.cordova;
 
+import android.os.Bundle;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import org.apache.cordova.LOG;
-
-import android.app.Activity;
-import android.os.Bundle;
 
 public class CordovaPreferences {
     private HashMap<String, String> prefs = new HashMap<String, String>(20);
@@ -47,11 +44,11 @@ public class CordovaPreferences {
     public void set(String name, int value) {
         set(name, "" + value);
     }
-    
+
     public void set(String name, double value) {
         set(name, "" + value);
     }
-    
+
     public Map<String, String> getAll() {
         return prefs;
     }
@@ -75,7 +72,7 @@ public class CordovaPreferences {
         String value = prefs.get(name);
         if (value != null) {
             // Use Integer.decode() can't handle it if the highest bit is set.
-            return (int)(long)Long.decode(value);
+            return (int) (long) Long.decode(value);
         }
         return defaultValue;
     }

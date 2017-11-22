@@ -51,9 +51,9 @@ import java.lang.reflect.Method;
 /**
  * Glue class between CordovaWebView (main Cordova logic) and SystemWebView (the actual View).
  * We make the Engine separate from the actual View so that:
- *  A) We don't need to worry about WebView methods clashing with CordovaWebViewEngine methods
- *     (e.g.: goBack() is void for WebView, and boolean for CordovaWebViewEngine)
- *  B) Separating the actual View from the Engine makes API surfaces smaller.
+ * A) We don't need to worry about WebView methods clashing with CordovaWebViewEngine methods
+ * (e.g.: goBack() is void for WebView, and boolean for CordovaWebViewEngine)
+ * B) Separating the actual View from the Engine makes API surfaces smaller.
  * Class uses two-phase initialization. However, CordovaWebView is responsible for calling .init().
  */
 public class SystemWebViewEngine implements CordovaWebViewEngine {
@@ -71,7 +71,9 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
     protected NativeToJsMessageQueue nativeToJsMessageQueue;
     private BroadcastReceiver receiver;
 
-    /** Used when created via reflection. */
+    /**
+     * Used when created via reflection.
+     */
     public SystemWebViewEngine(Context context, CordovaPreferences preferences) {
         this(new SystemWebView(context), preferences);
     }
@@ -88,8 +90,8 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
     @Override
     public void init(CordovaWebView parentWebView, CordovaInterface cordova, CordovaWebViewEngine.Client client,
-              CordovaResourceApi resourceApi, PluginManager pluginManager,
-              NativeToJsMessageQueue nativeToJsMessageQueue) {
+                     CordovaResourceApi resourceApi, PluginManager pluginManager,
+                     NativeToJsMessageQueue nativeToJsMessageQueue) {
         if (this.cordova != null) {
             throw new IllegalStateException();
         }
@@ -112,14 +114,15 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
             public void setNetworkAvailable(boolean value) {
                 webView.setNetworkAvailable(value);
             }
+
             @Override
             public void runOnUiThread(Runnable r) {
                 SystemWebViewEngine.this.cordova.getActivity().runOnUiThread(r);
             }
         }));
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2)
             nativeToJsMessageQueue.addBridgeMode(new NativeToJsMessageQueue.EvalBridgeMode(this, cordova));
-	bridge = new CordovaBridge(pluginManager, nativeToJsMessageQueue);
+        bridge = new CordovaBridge(pluginManager, nativeToJsMessageQueue);
         exposeJsInterface(webView, bridge);
     }
 
@@ -151,13 +154,12 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
         // Set the nav dump for HTC 2.x devices (disabling for ICS, deprecated entirely for Jellybean 4.2)
         try {
-            Method gingerbread_getMethod =  WebSettings.class.getMethod("setNavDump", new Class[] { boolean.class });
+            Method gingerbread_getMethod = WebSettings.class.getMethod("setNavDump", new Class[]{boolean.class});
 
             String manufacturer = android.os.Build.MANUFACTURER;
             LOG.d(TAG, "CordovaWebView is running on device made by: " + manufacturer);
-            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB &&
-                    android.os.Build.MANUFACTURER.contains("HTC"))
-            {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB &&
+                    android.os.Build.MANUFACTURER.contains("HTC")) {
                 gingerbread_getMethod.invoke(settings, true);
             }
         } catch (NoSuchMethodException e) {
@@ -192,7 +194,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         //Determine whether we're in debug or release mode, and turn on Debugging!
         ApplicationInfo appInfo = webView.getContext().getApplicationContext().getApplicationInfo();
         if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 &&
-            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             enableRemoteDebugging();
         }
 
@@ -344,11 +346,9 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
     @Override
     public void evaluateJavascript(String js, ValueCallback<String> callback) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(js, callback);
-        }
-        else
-        {
+        } else {
             LOG.d(TAG, "This webview is using the old bridge");
         }
     }

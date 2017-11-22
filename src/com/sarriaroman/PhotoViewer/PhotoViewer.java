@@ -1,18 +1,18 @@
 package com.sarriaroman.PhotoViewer;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 /**
  * Class to Open PhotoViewer with the Required Parameters from Cordova
- *
+ * <p>
  * - URL
  * - Title
  */
@@ -62,14 +62,14 @@ public class PhotoViewer extends CordovaPlugin {
     @Override
     public void onRequestPermissionResult(int requestCode, String[] permissions,
                                           int[] grantResults) throws JSONException {
-        for(int r:grantResults) {
-            if(r == PackageManager.PERMISSION_DENIED) {
+        for (int r : grantResults) {
+            if (r == PackageManager.PERMISSION_DENIED) {
                 this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, PERMISSION_DENIED_ERROR));
                 return;
             }
         }
 
-        switch(requestCode) {
+        switch (requestCode) {
             case REQ_CODE:
                 launchActivity();
                 break;

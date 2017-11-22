@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.apache.cordova.CordovaActivity;
 
 public class WebViewActivity extends CordovaActivity {
     static Dialog dialog;
     static Activity activity2;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,16 +25,15 @@ public class WebViewActivity extends CordovaActivity {
         Bundle b = getIntent().getExtras();
         String url = b.getString("url");
         Boolean shouldShowLoading = false;
-        try{
+        try {
             shouldShowLoading = b.getBoolean("shouldShowLoading");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
         }
-        if(shouldShowLoading){
+        if (shouldShowLoading) {
             showLoading();
         }
-        loadUrl((url.matches("^(.*://|javascript:)[\\s\\S]*$")?"":"file:///android_asset/www/")+url);
+        loadUrl((url.matches("^(.*://|javascript:)[\\s\\S]*$") ? "" : "file:///android_asset/www/") + url);
     }
 
     public static boolean showLoading() {
@@ -42,9 +41,9 @@ public class WebViewActivity extends CordovaActivity {
         activity2.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialog = new Dialog(activity2,android.R.style.Theme_Translucent_NoTitleBar);
-                ProgressBar progressBar = new ProgressBar(activity2,null,android.R.attr.progressBarStyle);
-                
+                dialog = new Dialog(activity2, android.R.style.Theme_Translucent_NoTitleBar);
+                ProgressBar progressBar = new ProgressBar(activity2, null, android.R.attr.progressBarStyle);
+
                 LinearLayout linearLayout = new LinearLayout(activity2);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 RelativeLayout layoutPrincipal = new RelativeLayout(activity2);
@@ -69,7 +68,7 @@ public class WebViewActivity extends CordovaActivity {
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                        if(keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK)
+                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK)
                             return true;
                         return false;
                     }

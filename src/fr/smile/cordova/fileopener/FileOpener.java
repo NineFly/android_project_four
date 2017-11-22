@@ -1,32 +1,28 @@
 package fr.smile.cordova.fileopener;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.lang.String;
-import java.net.URLDecoder;
-import java.util.HashMap;
-
 import android.annotation.TargetApi;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
+import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-
-import android.os.Environment;
-import android.content.pm.PackageManager;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.database.Cursor;
-
-import android.content.ActivityNotFoundException;
-import android.util.Log;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
 
 @TargetApi(9)
 public class FileOpener extends CordovaPlugin {

@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.apache.cordova.CordovaResourceApi;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,7 +129,7 @@ public class AssetFilesystem extends Filesystem {
     public AssetFilesystem(AssetManager assetManager, CordovaResourceApi resourceApi) {
         super(Uri.parse("file:///android_asset/"), "assets", resourceApi);
         this.assetManager = assetManager;
-	}
+    }
 
     @Override
     public Uri toNativeUri(LocalFilesystemURL inputURL) {
@@ -156,9 +155,9 @@ public class AssetFilesystem extends Filesystem {
             subPath = subPath.substring(1);
         }
         Uri.Builder b = new Uri.Builder()
-            .scheme(LocalFilesystemURL.FILESYSTEM_PROTOCOL)
-            .authority("localhost")
-            .path(name);
+                .scheme(LocalFilesystemURL.FILESYSTEM_PROTOCOL)
+                .authority("localhost")
+                .path(name);
         if (!subPath.isEmpty()) {
             b.appendEncodedPath(subPath);
         }
@@ -196,7 +195,7 @@ public class AssetFilesystem extends Filesystem {
             entries[i] = localUrlforFullPath(new File(inputURL.path, files[i]).getPath());
         }
         return entries;
-	}
+    }
 
     @Override
     public JSONObject getFileForLocalURL(LocalFilesystemURL inputURL,
@@ -233,25 +232,25 @@ public class AssetFilesystem extends Filesystem {
     }
 
     @Override
-	public JSONObject getFileMetadataForLocalURL(LocalFilesystemURL inputURL) throws FileNotFoundException {
+    public JSONObject getFileMetadataForLocalURL(LocalFilesystemURL inputURL) throws FileNotFoundException {
         JSONObject metadata = new JSONObject();
         long size = inputURL.isDirectory ? 0 : getAssetSize(inputURL.path);
         try {
-        	metadata.put("size", size);
-        	metadata.put("type", inputURL.isDirectory ? "text/directory" : resourceApi.getMimeType(toNativeUri(inputURL)));
-        	metadata.put("name", new File(inputURL.path).getName());
-        	metadata.put("fullPath", inputURL.path);
-        	metadata.put("lastModifiedDate", 0);
+            metadata.put("size", size);
+            metadata.put("type", inputURL.isDirectory ? "text/directory" : resourceApi.getMimeType(toNativeUri(inputURL)));
+            metadata.put("name", new File(inputURL.path).getName());
+            metadata.put("fullPath", inputURL.path);
+            metadata.put("lastModifiedDate", 0);
         } catch (JSONException e) {
             return null;
         }
         return metadata;
-	}
+    }
 
-	@Override
-	public boolean canRemoveFileAtLocalURL(LocalFilesystemURL inputURL) {
-		return false;
-	}
+    @Override
+    public boolean canRemoveFileAtLocalURL(LocalFilesystemURL inputURL) {
+        return false;
+    }
 
     @Override
     long writeToFileAtURL(LocalFilesystemURL inputURL, String data, int offset, boolean isBinary) throws NoModificationAllowedException, IOException {

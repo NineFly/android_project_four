@@ -18,15 +18,9 @@
 */
 package org.apache.cordova;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -43,13 +37,19 @@ import android.view.WindowManager;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
 /**
  * This class is the main Android activity that represents the Cordova
  * application. It should be extended by the user to load the specific
  * html file that contains the application.
- *
+ * <p>
  * As an example:
- *
+ * <p>
  * <pre>
  *     package org.apache.cordova.examples;
  *
@@ -66,13 +66,12 @@ import android.widget.FrameLayout;
  *       }
  *     }
  * </pre>
- *
+ * <p>
  * Cordova xml configuration: Cordova uses a configuration file at
  * res/xml/config.xml to specify its settings. See "The config.xml File"
  * guide in cordova-docs at http://cordova.apache.org/docs for the documentation
  * for the configuration. The use of the set*Property() methods is
  * deprecated in favor of the config.xml file.
- *
  */
 public class CordovaActivity extends Activity {
     public static String TAG = "CordovaActivity";
@@ -184,8 +183,7 @@ public class CordovaActivity extends Activity {
                 int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
                 // Background of activity:
                 appView.getView().setBackgroundColor(backgroundColor);
-            }
-            catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
@@ -503,12 +501,9 @@ public class CordovaActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[],
                                            int[] grantResults) {
-        try
-        {
+        try {
             cordovaInterface.onRequestPermissionResult(requestCode, permissions, grantResults);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             LOG.d(TAG, "JSONException: Parameters fed into the method are not valid");
             e.printStackTrace();
         }

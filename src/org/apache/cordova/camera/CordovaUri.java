@@ -22,7 +22,6 @@ package org.apache.cordova.camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
@@ -43,29 +42,23 @@ public class CordovaUri {
      * We always expect a FileProvider string to be passed in for the file that we create
      *
      */
-    CordovaUri (Uri inputUri)
-    {
+    CordovaUri(Uri inputUri) {
         //Determine whether the file is a content or file URI
-        if(inputUri.getScheme().equals("content"))
-        {
+        if (inputUri.getScheme().equals("content")) {
             androidUri = inputUri;
             fileName = getFileNameFromUri(androidUri);
             fileUri = Uri.parse("file://" + fileName);
-        }
-        else
-        {
+        } else {
             fileUri = inputUri;
             fileName = FileHelper.stripFileProtocol(inputUri.toString());
         }
     }
 
-    public Uri getFileUri()
-    {
+    public Uri getFileUri() {
         return fileUri;
     }
 
-    public String getFilePath()
-    {
+    public String getFilePath() {
         return fileName;
     }
 
@@ -73,9 +66,8 @@ public class CordovaUri {
      * This only gets called by takePicture
      */
 
-    public Uri getCorrectUri()
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+    public Uri getCorrectUri() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return androidUri;
         else
             return fileUri;

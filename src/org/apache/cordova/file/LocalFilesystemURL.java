@@ -21,20 +21,20 @@ package org.apache.cordova.file;
 import android.net.Uri;
 
 public class LocalFilesystemURL {
-	
-	public static final String FILESYSTEM_PROTOCOL = "cdvfile";
+
+    public static final String FILESYSTEM_PROTOCOL = "cdvfile";
 
     public final Uri uri;
     public final String fsName;
     public final String path;
     public final boolean isDirectory;
 
-	private LocalFilesystemURL(Uri uri, String fsName, String fsPath, boolean isDirectory) {
-		this.uri = uri;
+    private LocalFilesystemURL(Uri uri, String fsName, String fsPath, boolean isDirectory) {
+        this.uri = uri;
         this.fsName = fsName;
         this.path = fsPath;
         this.isDirectory = isDirectory;
-	}
+    }
 
     public static LocalFilesystemURL parse(Uri uri) {
         if (!FILESYSTEM_PROTOCOL.equals(uri.getScheme())) {

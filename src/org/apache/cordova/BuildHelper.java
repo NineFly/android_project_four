@@ -26,7 +26,6 @@ package org.apache.cordova;
  *
  */
 
-import android.app.Activity;
 import android.content.Context;
 
 import java.lang.reflect.Field;
@@ -35,7 +34,7 @@ import java.lang.reflect.Field;
 public class BuildHelper {
 
 
-    private static String TAG="BuildHelper";
+    private static String TAG = "BuildHelper";
 
     /*
      * This needs to be implemented if you wish to use the Camera Plugin or other plugins
@@ -47,10 +46,8 @@ public class BuildHelper {
      *
      */
 
-    public static Object getBuildConfigValue(Context ctx, String key)
-    {
-        try
-        {
+    public static Object getBuildConfigValue(Context ctx, String key) {
+        try {
             Class<?> clazz = Class.forName(ctx.getPackageName() + ".BuildConfig");
             Field field = clazz.getField(key);
             return field.get(null);

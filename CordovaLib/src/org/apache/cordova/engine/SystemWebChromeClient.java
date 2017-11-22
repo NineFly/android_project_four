@@ -18,11 +18,10 @@
 */
 package org.apache.cordova.engine;
 
-import java.util.Arrays;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -33,11 +32,11 @@ import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions.Callback;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
+import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
-import android.webkit.PermissionRequest;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -45,6 +44,8 @@ import android.widget.RelativeLayout;
 import org.apache.cordova.CordovaDialogsHelper;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.LOG;
+
+import java.util.Arrays;
 
 /**
  * This class is the WebChromeClient that implements callbacks for our web view.
@@ -80,7 +81,8 @@ public class SystemWebChromeClient extends WebChromeClient {
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
         dialogsHelper.showAlert(message, new CordovaDialogsHelper.Result() {
-            @Override public void gotResult(boolean success, String value) {
+            @Override
+            public void gotResult(boolean success, String value) {
                 if (success) {
                     result.confirm();
                 } else {
@@ -113,7 +115,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      * Tell the client to display a prompt dialog to the user.
      * If the client returns true, WebView will assume that the client will
      * handle the prompt dialog and call the appropriate JsPromptResult method.
-     *
+     * <p>
      * Since we are hacking prompts for our own purposes, we should not be using them for
      * this purpose, perhaps we should hack console.log to do this instead!
      */
@@ -143,8 +145,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      */
     @Override
     public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
-            long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
-    {
+                                        long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater) {
         LOG.d(LOG_TAG, "onExceededDatabaseQuota estimatedSize: %d  currentQuota: %d  totalUsedQuota: %d", estimatedSize, currentQuota, totalUsedQuota);
         quotaUpdater.updateQuota(MAX_QUOTA);
     }
@@ -153,11 +154,9 @@ public class SystemWebChromeClient extends WebChromeClient {
     // Expect this to not compile in a future Android release!
     @SuppressWarnings("deprecation")
     @Override
-    public void onConsoleMessage(String message, int lineNumber, String sourceID)
-    {
+    public void onConsoleMessage(String message, int lineNumber, String sourceID) {
         //This is only for Android 2.1
-        if(android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.ECLAIR_MR1)
-        {
+        if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.ECLAIR_MR1) {
             LOG.d(LOG_TAG, "%s: Line %d : %s", sourceID, lineNumber, message);
             super.onConsoleMessage(message, lineNumber, sourceID);
         }
@@ -165,11 +164,10 @@ public class SystemWebChromeClient extends WebChromeClient {
 
     @TargetApi(8)
     @Override
-    public boolean onConsoleMessage(ConsoleMessage consoleMessage)
-    {
+    public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
         if (consoleMessage.message() != null)
-            LOG.d(LOG_TAG, "%s: Line %d : %s" , consoleMessage.sourceId() , consoleMessage.lineNumber(), consoleMessage.message());
-         return super.onConsoleMessage(consoleMessage);
+            LOG.d(LOG_TAG, "%s: Line %d : %s", consoleMessage.sourceId(), consoleMessage.lineNumber(), consoleMessage.message());
+        return super.onConsoleMessage(consoleMessage);
     }
 
     @Override
@@ -186,8 +184,7 @@ public class SystemWebChromeClient extends WebChromeClient {
         callback.invoke(origin, true, false);
         //Get the plugin, it should be loaded
         CordovaPlugin geolocation = parentEngine.pluginManager.getPlugin("Geolocation");
-        if(geolocation != null && !geolocation.hasPermisssion())
-        {
+        if (geolocation != null && !geolocation.hasPermisssion()) {
             geolocation.requestPermissions(0);
         }
 
@@ -230,7 +227,7 @@ public class SystemWebChromeClient extends WebChromeClient {
 
             mVideoProgressView = layout;
         }
-    return mVideoProgressView;
+        return mVideoProgressView;
     }
 
     // <input type=file> support:
@@ -240,12 +237,11 @@ public class SystemWebChromeClient extends WebChromeClient {
         this.openFileChooser(uploadMsg, "*/*");
     }
 
-    public void openFileChooser( ValueCallback<Uri> uploadMsg, String acceptType ) {
+    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
         this.openFileChooser(uploadMsg, acceptType, null);
     }
 
-    public void openFileChooser(final ValueCallback<Uri> uploadMsg, String acceptType, String capture)
-    {
+    public void openFileChooser(final ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
@@ -286,7 +282,7 @@ public class SystemWebChromeClient extends WebChromeClient {
         request.grant(request.getResources());
     }
 
-    public void destroyLastDialog(){
+    public void destroyLastDialog() {
         dialogsHelper.destroyLastDialog();
     }
 }
