@@ -1,4 +1,4 @@
-package com.sarriaroman.PhotoViewer;
+package com.ths.plt.cordova.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.ths.plt.cordova.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,9 @@ import java.io.IOException;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+/**
+ * 图片预览界面
+ */
 public class PhotoActivity extends Activity {
     private PhotoViewAttacher mAttacher;
 
@@ -44,12 +48,24 @@ public class PhotoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_photo);
 
-        setContentView(getApplication().getResources().getIdentifier("activity_photo", "layout", getApplication().getPackageName()));
+        initView();
+        initData();
+        initEvent();
 
-        // Load the Views
-        findViews();
+    }
+    private void initView() {
+        closeBtn = (ImageButton) findViewById(R.id.closeBtn);
+        shareBtn = (ImageButton) findViewById(R.id.shareBtn);
 
+        photo = (ImageView) findViewById(R.id.photoView);
+        mAttacher = new PhotoViewAttacher(photo);
+
+        titleTxt = (TextView) findViewById(R.id.titleTxt);
+    }
+
+    private void initData() {
         try {
             options = new JSONObject(this.getIntent().getStringExtra("options"));
             shareBtnVisibility = options.getBoolean("share") ? View.VISIBLE : View.INVISIBLE;
@@ -65,8 +81,10 @@ public class PhotoActivity extends Activity {
         }
 
         imageUrl = this.getIntent().getStringExtra("url");
+        loadImage();
+    }
 
-        // Set Button Listeners
+    private void initEvent() {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,49 +107,8 @@ public class PhotoActivity extends Activity {
                 }
             }
         });
-
-        loadImage();
     }
 
-    /**
-     * Find and Connect Views
-     */
-    private void findViews() {
-        // Buttons first
-        closeBtn = (ImageButton) findViewById(getApplication().getResources().getIdentifier("closeBtn", "id", getApplication().getPackageName()));
-        shareBtn = (ImageButton) findViewById(getApplication().getResources().getIdentifier("shareBtn", "id", getApplication().getPackageName()));
-
-        // Photo Container
-        photo = (ImageView) findViewById(getApplication().getResources().getIdentifier("photoView", "id", getApplication().getPackageName()));
-        mAttacher = new PhotoViewAttacher(photo);
-
-        // Title TextView
-        titleTxt = (TextView) findViewById(getApplication().getResources().getIdentifier("titleTxt", "id", getApplication().getPackageName()));
-    }
-
-    /**
-     * Get the current Activity
-     *
-     * @return
-     */
-    private Activity getActivity() {
-        return this;
-    }
-
-    /**
-     * Hide Loading when showing the photo. Update the PhotoView Attacher
-     */
-    private void hideLoadingAndUpdate() {
-        photo.setVisibility(View.VISIBLE);
-
-        shareBtn.setVisibility(shareBtnVisibility);
-
-        mAttacher.update();
-    }
-
-    /**
-     * Load the image using Picasso
-     */
     private void loadImage() {
         if (imageUrl.startsWith("http")) {
             Picasso.with(this)
@@ -146,15 +123,15 @@ public class PhotoActivity extends Activity {
 
                         @Override
                         public void onError() {
-                            Toast.makeText(getActivity(), "Error loading image.", Toast.LENGTH_LONG).show();
-
+                            Toast.makeText(PhotoActivity.this, "Error loading image.", Toast.LENGTH_LONG).show();
                             finish();
                         }
                     });
         } else if (imageUrl.startsWith("data:image")) {
             String base64String = imageUrl.substring(imageUrl.indexOf(",") + 1);
             byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
+                    decodedString.length);
             photo.setImageBitmap(decodedByte);
 
             hideLoadingAndUpdate();
@@ -163,6 +140,15 @@ public class PhotoActivity extends Activity {
 
             hideLoadingAndUpdate();
         }
+    }
+
+    /**
+     * Hide Loading when showing the photo. Update the PhotoView Attacher
+     */
+    private void hideLoadingAndUpdate() {
+        photo.setVisibility(View.VISIBLE);
+        shareBtn.setVisibility(shareBtnVisibility);
+        mAttacher.update();
     }
 
     /**
@@ -180,7 +166,6 @@ public class PhotoActivity extends Activity {
         } else {
             return null;
         }
-
         // Store image to default external storage directory
         Uri bmpUri = null;
         try {

@@ -11,7 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Code taken from: https://github.com/wildabeast/BarcodeScanner
 */
-package com.synconset;
+package com.ths.plt.cordova.bean;
 
 import android.app.Activity;
 import android.content.Context;

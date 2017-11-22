@@ -1,8 +1,10 @@
-package com.sarriaroman.PhotoViewer;
+package com.ths.plt.cordova.plugin;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import com.ths.plt.cordova.activity.PhotoActivity;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -49,7 +51,7 @@ public class PhotoViewer extends CordovaPlugin {
     }
 
     protected void launchActivity() throws JSONException {
-        Intent i = new Intent(this.cordova.getActivity(), com.sarriaroman.PhotoViewer.PhotoActivity.class);
+        Intent i = new Intent(this.cordova.getActivity(), PhotoActivity.class);
 
         i.putExtra("url", this.args.getString(0));
         i.putExtra("title", this.args.getString(1));

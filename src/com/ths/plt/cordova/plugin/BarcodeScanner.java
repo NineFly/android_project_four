@@ -6,7 +6,7 @@
  * Copyright (c) 2011, IBM Corporation
  * Copyright (c) 2013, Maciej Nux Jaros
  */
-package com.phonegap.plugins.barcodescanner;
+package com.ths.plt.cordova.plugin;
 
 import android.Manifest;
 import android.app.Activity;

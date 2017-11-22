@@ -1,24 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ths.plt.cordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
-        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
     <feature name="BarcodeScanner">
-        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.BarcodeScanner" />
     </feature>
     <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
     <feature name="OpenFile">
-        <param name="android-package" value="org.vaadin.alump.openfile.OpenFile" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.OpenFile" />
     </feature>
     <feature name="PhotoViewer">
-        <param name="android-package" value="com.sarriaroman.PhotoViewer.PhotoViewer" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.PhotoViewer" />
     </feature>
     <feature name="File">
         <param name="android-package" value="org.apache.cordova.file.FileUtils" />
@@ -28,22 +28,22 @@
         <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
     </feature>
     <feature name="Cache">
-        <param name="android-package" value="com.sharinglabs.cordova.plugin.cache.Cache" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.Cache" />
     </feature>
     <feature name="FileTransfer">
-        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.FileTransfer" />
     </feature>
     <feature name="ImagePicker">
-        <param name="android-package" value="com.synconset.ImagePicker" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.ImagePicker" />
     </feature>
     <feature name="FileOpener">
-        <param name="android-package" value="fr.smile.cordova.fileopener.FileOpener" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.FileOpener" />
     </feature>
     <feature name="Notification">
-        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.Notification" />
     </feature>
     <feature name="WebViewPlugin">
-        <param name="android-package" value="cl.kunder.webview.WebViewPlugin" />
+        <param name="android-package" value="com.ths.plt.cordova.plugin.WebViewPlugin" />
     </feature>
     <name>移动办公</name>
     <description>移动办公系统</description>

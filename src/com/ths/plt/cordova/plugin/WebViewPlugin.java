@@ -1,17 +1,18 @@
-package cl.kunder.webview;
+package com.ths.plt.cordova.plugin;
 
 
 import android.content.Intent;
 
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaInterface;
+import com.ths.plt.cordova.activity.WebViewActivity;
 
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.LOG;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.cordova.LOG;
 
 
 public class WebViewPlugin extends CordovaPlugin {

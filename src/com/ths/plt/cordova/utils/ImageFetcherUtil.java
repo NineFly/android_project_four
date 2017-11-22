@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.synconset;
+package com.ths.plt.cordova.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,13 +52,13 @@ import java.util.concurrent.RejectedExecutionException;
  * A local cache of downloaded images is maintained internally to improve
  * performance.
  */
-public class ImageFetcher {
+public class ImageFetcherUtil {
 
     private int colWidth;
     private long origId;
     private ExecutorService executor;
 
-    public ImageFetcher() {
+    public ImageFetcherUtil() {
         executor = Executors.newCachedThreadPool();
     }
 

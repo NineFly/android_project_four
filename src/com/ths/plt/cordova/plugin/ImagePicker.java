@@ -1,10 +1,12 @@
 /**
  * An Image Picker Plugin for Cordova/PhoneGap.
  */
-package com.synconset;
+package com.ths.plt.cordova.plugin;
 
 import android.app.Activity;
 import android.content.Intent;
+
+import com.ths.plt.cordova.activity.MultiImageChooserActivity;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;

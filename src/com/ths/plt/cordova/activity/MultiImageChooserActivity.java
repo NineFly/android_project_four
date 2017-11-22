@@ -28,7 +28,7 @@
  *
  */
 
-package com.synconset;
+package com.ths.plt.cordova.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -62,6 +62,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ths.plt.cordova.R;
+import com.ths.plt.cordova.bean.FakeR;
+import com.ths.plt.cordova.utils.ImageFetcherUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -107,7 +111,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private GridView gridView;
 
-    private final ImageFetcher fetcher = new ImageFetcher();
+    private final ImageFetcherUtil fetcher = new ImageFetcherUtil();
 
     private int selectedColor = 0xff32b2e1;
     private boolean shouldRequestThumb = true;
@@ -120,7 +124,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fakeR = new FakeR(this);
-        setContentView(fakeR.getId("layout", "multiselectorgrid"));
+        setContentView(R.layout.multiselectorgrid);
         fileNames.clear();
 
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);

@@ -35,7 +35,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity
-            android:name="MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/activity_name"
             android:launchMode="singleTop"
@@ -85,14 +85,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.sarriaroman.PhotoViewer.PhotoActivity"
+            android:name=".activity.PhotoActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
         <activity
-            android:name="com.synconset.MultiImageChooserActivity"
+            android:name=".activity.MultiImageChooserActivity"
             android:label="@string/multi_app_name"
             android:theme="@android:style/Theme.Holo.Light" />
         <activity
-            android:name="cl.kunder.webview.WebViewActivity"
+            android:name=".activity.WebViewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:exported="true"
             android:label="@string/activity_name"

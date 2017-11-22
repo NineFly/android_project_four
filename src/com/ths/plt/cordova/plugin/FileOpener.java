@@ -1,4 +1,4 @@
-package fr.smile.cordova.fileopener;
+package com.ths.plt.cordova.plugin;
 
 import android.annotation.TargetApi;
 import android.app.DownloadManager;

@@ -1,4 +1,4 @@
-package cl.kunder.webview;
+package com.ths.plt.cordova.activity;
 
 import android.app.Activity;
 import android.app.Dialog;

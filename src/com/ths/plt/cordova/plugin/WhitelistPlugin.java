@@ -17,7 +17,7 @@
        under the License.
 */
 
-package org.apache.cordova.whitelist;
+package com.ths.plt.cordova.plugin;
 
 import android.content.Context;
 

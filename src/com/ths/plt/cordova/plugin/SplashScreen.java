@@ -17,7 +17,7 @@
        under the License.
 */
 
-package org.apache.cordova.splashscreen;
+package com.ths.plt.cordova.plugin;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;

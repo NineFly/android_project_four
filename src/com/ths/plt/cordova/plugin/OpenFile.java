@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vaadin.alump.openfile;
+package com.ths.plt.cordova.plugin;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
