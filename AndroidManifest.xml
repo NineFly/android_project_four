@@ -100,6 +100,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.AndyViewPagerActivity"
+            >
+        </activity>
     </application>
 
 </manifest>
