@@ -37,21 +37,27 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * 图片预览界面
  */
-public class PhotoActivity extends Activity {
-    private PhotoViewAttacher mAttacher;
+public class PhotoActivity extends Activity implements
+        ViewPager.OnPageChangeListener {
 
     private ImageView photo;
-    private String imageUrl;
 
     private ImageButton closeBtn;
     private ImageButton shareBtn;
+    private PhotoViewAttacher mAttacher;
 
     private TextView titleTxt;
     protected ViewPager mViewPager;
     private JSONObject options;
     private int shareBtnVisibility;
-    protected PagerAdapter adapter;
+    protected ThisPageAdapter adapter;
+    public static ConcurrentHashMap map = new ConcurrentHashMap();
 
+    public static final String INDEX = "INDEX";
+    public static final String FILE_URL = "FILE_URL";
+
+    protected String[] fileUrls; //原图URL
+    int currentItem = 0;//用户点击的是第几个，而不是当前viewpager的currentItem
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +72,16 @@ public class PhotoActivity extends Activity {
     private void initView() {
         closeBtn = (ImageButton) findViewById(R.id.closeBtn);
         shareBtn = (ImageButton) findViewById(R.id.shareBtn);
-
         mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
-
         photo = (ImageView) findViewById(R.id.photoView);
         mAttacher = new PhotoViewAttacher(photo);
-
         titleTxt = (TextView) findViewById(R.id.titleTxt);
     }
 
     private void initData() {
+        Intent intent = this.getIntent();
         try {
-            options = new JSONObject(this.getIntent().getStringExtra("options"));
+            options = new JSONObject(intent.getStringExtra("options"));
             shareBtnVisibility = options.getBoolean("share") ? View.VISIBLE : View.INVISIBLE;
         } catch (JSONException exception) {
             shareBtnVisibility = View.VISIBLE;
@@ -85,62 +89,54 @@ public class PhotoActivity extends Activity {
         shareBtn.setVisibility(shareBtnVisibility);
 
         // Change the Activity Title
-        String actTitle = this.getIntent().getStringExtra("title");
+        String actTitle = intent.getStringExtra("title");
         if (!actTitle.equals("")) {
             titleTxt.setText(actTitle);
         }
 
-        imageUrl = this.getIntent().getStringExtra("url");
+        String imageUrl = intent.getStringExtra("url");
+        fileUrls = intent.getStringArrayExtra(FILE_URL); //原图URL
+        if (currentItem >= fileUrls.length) {
+            currentItem = 0;
+        }
 
-        // 设置当前页面前后，各预加载1个Page。
         mViewPager.setOffscreenPageLimit(1);
-        adapter = new PagerAdapter() {
-            @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                View view = View.inflate(container.getContext(), R.layout.row_imageview, null);
-                view.setId(position); //用于查找此View
-                container.addView(view);
-                loadBigImage(position, view);
-//                if (position == 0) {
-//                    handleCurrentPosition(position);
-//                }
-//                Log.i(TAG, "instantiateItem: end" + System.currentTimeMillis());
-                return view;
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object object) {
-                container.removeView((View) object);
-            }
-
-            @Override
-            public boolean isViewFromObject(View arg0, Object arg1) {
-                return arg0 == arg1;
-            }
-
-            @Override
-            public int getCount() {
-//                return fileUrls.length;
-                return 1;
-            }
-        };
+        mViewPager.setCurrentItem(currentItem);
+        showPageNumber(currentItem + 1);
+        // 设置当前页面前后，各预加载1个Page。
+        adapter = new ThisPageAdapter();
         mViewPager.setAdapter(adapter);
+
         // TODO: 2017/11/22 待完成 
         mViewPager.setVisibility(View.GONE);
-        loadImage();
+        loadImage(imageUrl);
     }
 
-    private class ViewHolder {
-        View loadingView;
-        //        TextView loadingMsgview;
-        CircleProgressView loadingViewImage;
-        TextView loadingFailedMsgview;
-        LargeImageView imageView;
-//        GifImageView gifImageView;
-        String imageUrl;
-        int position;
+    private void initEvent() {
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri bmpUri = getLocalBitmapUri(photo);
+
+                if (bmpUri != null) {
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+                    sharingIntent.setType("image/*");
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+
+                    startActivity(Intent.createChooser(sharingIntent, "Share"));
+                }
+            }
+        });
+        mViewPager.setOnPageChangeListener(this);
     }
-    public static ConcurrentHashMap map = new ConcurrentHashMap();
 
     /**
      * 加载原图
@@ -174,7 +170,7 @@ public class PhotoActivity extends Activity {
 
         }
 
-//        final String imgUrl = fileUrls[position];
+        final String imgUrl = fileUrls[position];
 //        tempHolder.imageView.setOnLongClickListener(imglongListener);
 
 
@@ -184,37 +180,13 @@ public class PhotoActivity extends Activity {
 //        } else {
 //            showOtherImage(position, tempHolder, imgUrl);
 //        }
+        // TODO: 2017/11/24 加载图片
     }
 
-    private void initEvent() {
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri bmpUri = getLocalBitmapUri(photo);
-
-                if (bmpUri != null) {
-                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-
-                    sharingIntent.setType("image/*");
-                    sharingIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-
-                    startActivity(Intent.createChooser(sharingIntent, "Share"));
-                }
-            }
-        });
-    }
-
-    private void loadImage() {
-        if (imageUrl.startsWith("http")) {
+    private void loadImage(String imgUrl) {
+        if (imgUrl.startsWith("http")) {
             Picasso.with(this)
-                    .load(imageUrl)
+                    .load(imgUrl)
                     .fit()
                     .centerInside()
                     .into(photo, new com.squareup.picasso.Callback() {
@@ -225,12 +197,14 @@ public class PhotoActivity extends Activity {
 
                         @Override
                         public void onError() {
-                            Toast.makeText(PhotoActivity.this, "Error loading image.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(PhotoActivity.this,
+                                    "Error loading image.",
+                                    Toast.LENGTH_LONG).show();
                             finish();
                         }
                     });
-        } else if (imageUrl.startsWith("data:image")) {
-            String base64String = imageUrl.substring(imageUrl.indexOf(",") + 1);
+        } else if (imgUrl.startsWith("data:image")) {
+            String base64String = imgUrl.substring(imgUrl.indexOf(",") + 1);
             byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
                     decodedString.length);
@@ -238,7 +212,7 @@ public class PhotoActivity extends Activity {
 
             hideLoadingAndUpdate();
         } else {
-            photo.setImageURI(Uri.parse(imageUrl));
+            photo.setImageURI(Uri.parse(imgUrl));
 
             hideLoadingAndUpdate();
         }
@@ -278,6 +252,66 @@ public class PhotoActivity extends Activity {
             e.printStackTrace();
         }
         return bmpUri;
+    }
+
+    /**
+     * 显示当前页面信息
+     */
+    private void showPageNumber(int curPage) {
+        // TODO: 2017/11/24 总共有多少张图片,当前显示哪一张图片
+//        totalPage.setText("/" + fileUrls.length);
+//        currentPage.setText("" + curPage);
+    }
+
+    private class ViewHolder {
+        View loadingView;
+        //        TextView loadingMsgview;
+        CircleProgressView loadingViewImage;
+        TextView loadingFailedMsgview;
+        LargeImageView imageView;
+        //        GifImageView gifImageView;
+        String imageUrl;
+        int position;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        showPageNumber(position + 1);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
+
+    private class ThisPageAdapter extends PagerAdapter{
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view = View.inflate(container.getContext(), R.layout.row_imageview, null);
+            view.setId(position); //用于查找此View
+            container.addView(view);
+            loadBigImage(position, view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public int getCount() {
+            return fileUrls.length;
+        }
     }
 
 }
