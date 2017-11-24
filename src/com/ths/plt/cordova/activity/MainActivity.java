@@ -21,13 +21,15 @@ package com.ths.plt.cordova.activity;
 
 import android.os.Bundle;
 
-import org.apache.cordova.*;
+import org.apache.cordova.CordovaActivity;
+
 
 public class MainActivity extends CordovaActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//        setContentView(R.layout.activity_main);
+        
         // enable Cordova apps to be started in the background
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
