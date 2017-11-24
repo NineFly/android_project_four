@@ -111,6 +111,7 @@
     <orderEntry type="library" exported="" name="com.android.support:support-media-compat-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="com.commit451:PhotoView-1.2.4" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.picasso:picasso:2.5.2@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.github.GrenderG:Toasty-1.2.5" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-vector-drawable-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-v4-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-fragment-25.3.0" level="project" />
