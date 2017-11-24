@@ -79,7 +79,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class MultiImageChooserActivity extends Activity implements OnItemClickListener,
+public class MultiImageChooserActivity extends BaseActivity implements OnItemClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ImagePicker";
 

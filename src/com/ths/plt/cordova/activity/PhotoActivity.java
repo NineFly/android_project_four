@@ -37,7 +37,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * 图片预览界面
  */
-public class PhotoActivity extends Activity implements
+public class PhotoActivity extends BaseActivity implements
         ViewPager.OnPageChangeListener {
 
     private ImageView photo;
