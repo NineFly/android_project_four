@@ -141,6 +141,81 @@ public class CordovaActivity extends Activity {
         }
     }
 
+    /**
+     * Called when the activity is becoming visible to the user.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LOG.d(TAG, "Started the activity.");
+
+        if (this.appView == null) {
+            return;
+        }
+        this.appView.handleStart();
+    }
+
+    /**
+     * Called when the activity will start interacting with the user.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LOG.d(TAG, "Resumed the activity.");
+
+        if (this.appView == null) {
+            return;
+        }
+        // Force window to have focus, so application always
+        // receive user input. Workaround for some devices (Samsung Galaxy Note 3 at least)
+        this.getWindow().getDecorView().requestFocus();
+
+        this.appView.handleResume(this.keepRunning);
+    }
+
+    /**
+     * Called when the system is about to start resuming a previous activity.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LOG.d(TAG, "Paused the activity.");
+
+        if (this.appView != null) {
+            // CB-9382 If there is an activity that started for result and main activity is waiting for callback
+            // result, we shoudn't stop WebView Javascript timers, as activity for result might be using them
+            boolean keepRunning = this.keepRunning || this.cordovaInterface.activityResultCallback != null;
+            this.appView.handlePause(keepRunning);
+        }
+    }
+
+    /**
+     * Called when the activity is no longer visible to the user.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LOG.d(TAG, "Stopped the activity.");
+
+        if (this.appView == null) {
+            return;
+        }
+        this.appView.handleStop();
+    }
+
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        LOG.d(TAG, "CordovaActivity.onDestroy()");
+        super.onDestroy();
+
+        if (this.appView != null) {
+            appView.handleDestroy();
+        }
+    }
+
     protected void init() {
         appView = makeWebView();
         createViews();
@@ -180,7 +255,7 @@ public class CordovaActivity extends Activity {
 
         if (preferences.contains("BackgroundColor")) {
             try {
-                int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
+                int backgroundColor = preferences.getInteger("BackgroundColor", Color.WHITE);
                 // Background of activity:
                 appView.getView().setBackgroundColor(backgroundColor);
             } catch (NumberFormatException e) {
@@ -229,22 +304,6 @@ public class CordovaActivity extends Activity {
     }
 
     /**
-     * Called when the system is about to start resuming a previous activity.
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LOG.d(TAG, "Paused the activity.");
-
-        if (this.appView != null) {
-            // CB-9382 If there is an activity that started for result and main activity is waiting for callback
-            // result, we shoudn't stop WebView Javascript timers, as activity for result might be using them
-            boolean keepRunning = this.keepRunning || this.cordovaInterface.activityResultCallback != null;
-            this.appView.handlePause(keepRunning);
-        }
-    }
-
-    /**
      * Called when the activity receives a new intent
      */
     @Override
@@ -253,65 +312,6 @@ public class CordovaActivity extends Activity {
         //Forward to plugins
         if (this.appView != null)
             this.appView.onNewIntent(intent);
-    }
-
-    /**
-     * Called when the activity will start interacting with the user.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LOG.d(TAG, "Resumed the activity.");
-
-        if (this.appView == null) {
-            return;
-        }
-        // Force window to have focus, so application always
-        // receive user input. Workaround for some devices (Samsung Galaxy Note 3 at least)
-        this.getWindow().getDecorView().requestFocus();
-
-        this.appView.handleResume(this.keepRunning);
-    }
-
-    /**
-     * Called when the activity is no longer visible to the user.
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LOG.d(TAG, "Stopped the activity.");
-
-        if (this.appView == null) {
-            return;
-        }
-        this.appView.handleStop();
-    }
-
-    /**
-     * Called when the activity is becoming visible to the user.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LOG.d(TAG, "Started the activity.");
-
-        if (this.appView == null) {
-            return;
-        }
-        this.appView.handleStart();
-    }
-
-    /**
-     * The final call you receive before your activity is destroyed.
-     */
-    @Override
-    public void onDestroy() {
-        LOG.d(TAG, "CordovaActivity.onDestroy()");
-        super.onDestroy();
-
-        if (this.appView != null) {
-            appView.handleDestroy();
-        }
     }
 
     /**
