@@ -41,8 +41,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 /**
- * This helper class download images from the Internet and binds those with the
- * provided ImageView.
+ * This helper class download images from the Internet
+ * and binds those with the provided ImageView.
  * <p>
  * <p>
  * It requires the INTERNET permission, which should be added to your
