@@ -94,7 +94,8 @@ public class PhotoActivity extends BaseActivity implements
         }
 
         String imageUrl = intent.getStringExtra("url");
-        fileUrls = intent.getStringArrayExtra(FILE_URL); //原图URL
+//        fileUrls = intent.getStringArrayExtra(FILE_URL); //原图URL
+        fileUrls = new String[]{"1","2","3"}; //原图URL
         if (currentItem >= fileUrls.length) {
             currentItem = 0;
         }
