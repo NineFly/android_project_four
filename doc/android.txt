@@ -1,0 +1,5 @@
+1:打包信息
+    密码:scgf2014
+    keystore路径:E:\pro_data\four_android\store
+    安装包路径:E:\pro_data\four_android\apk_apk
+
