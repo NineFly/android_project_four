@@ -10,15 +10,19 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <RelativeLayout
-        android:id="@+id/top"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/tv_jump"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewpager"
-        android:visibility="gone">
-
-        <!--<include layout="@layout/activity_top_title"></include>-->
-    </RelativeLayout>
+        android:text="跳过"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="14sp"
+        android:background="@drawable/btn_jump"
+        />
 
     <LinearLayout
         android:id="@+id/ll"
@@ -69,9 +73,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24.0dip"
-        android:background="@drawable/button_shape"
-        android:text="进入应用"
+        android:background="@drawable/btn_enter_green_bg"
+        android:text="立即开启"
         android:textColor="#ffffff"
         android:textSize="20sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 </RelativeLayout>

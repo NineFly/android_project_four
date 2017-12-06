@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <selector  
   xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:state_enabled="true" android:drawable="@drawable/dot_selected" />  
-    <item android:state_enabled="false" android:drawable="@drawable/dot_unselected" />  
+    <item android:state_enabled="true" android:drawable="@drawable/doot_selected_sl" />
+    <item android:state_enabled="false" android:drawable="@drawable/doot_unselected_sl" />
 </selector>

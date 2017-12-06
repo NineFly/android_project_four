@@ -2,6 +2,7 @@ package com.ths.plt.cordova.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ths.plt.cordova.R;
 import com.ths.plt.cordova.adapter.ViewPagerAdapter;
@@ -27,8 +29,8 @@ public class AndyViewPagerActivity extends Activity
         ViewPager.OnPageChangeListener {
     private ViewPager vp;
     // 引导图片资源
-    private static final int[] pics = {R.drawable.one,
-            R.drawable.two, R.drawable.three, R.drawable.four};
+    private static final int[] pics = {R.drawable.pic_one,
+            R.drawable.pic_two, R.drawable.pic_three, R.drawable.pic_four};
 
     // 底部小点图片
     private ImageView[] dots;
@@ -38,6 +40,8 @@ public class AndyViewPagerActivity extends Activity
     int curPage;
     Boolean about;
     private Button button;
+    private TextView tv_jump;
+    private LinearLayout ll;
 
     @SuppressLint("NewApi")
     @Override
@@ -45,6 +49,7 @@ public class AndyViewPagerActivity extends Activity
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.viewpage);
+
         hideVirtualButtons();
 
         initView();
@@ -55,6 +60,8 @@ public class AndyViewPagerActivity extends Activity
     private void initView() {
         vp = (ViewPager) findViewById(R.id.viewpager);
         button = (Button) findViewById(R.id.button);
+
+        tv_jump = (TextView) findViewById(R.id.tv_jump);
         // 初始化底部小点
         initDots();
 
@@ -89,29 +96,29 @@ public class AndyViewPagerActivity extends Activity
         vp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (top.getVisibility() == View.VISIBLE) {
-//                    top.setVisibility(View.GONE);
-//                } else if (top.getVisibility() == View.GONE) {
-//                    top.setVisibility(View.VISIBLE);
-//                }
+
             }
         });
-        // button = (Button) findViewById(R.id.button);
+        button = (Button) findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-//                Intent intent = new Intent(AndyViewPagerActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
-
+                enterMainActivity();
+            }
+        });
+        tv_jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //进入主页面
+                enterMainActivity();
             }
         });
     }
 
     private void initDots() {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+        ll = (LinearLayout) findViewById(R.id.ll);
 
         dots = new ImageView[pics.length];
 
@@ -125,6 +132,11 @@ public class AndyViewPagerActivity extends Activity
 
         currentIndex = 0;
         dots[currentIndex].setEnabled(false);
+    }
+
+    private void enterMainActivity() {
+        startActivity(new Intent(AndyViewPagerActivity.this, MainActivity.class));
+        finish();
     }
 
     /**
@@ -165,7 +177,7 @@ public class AndyViewPagerActivity extends Activity
 //                first();
                 return;
             }
-            finish();
+            enterMainActivity();
         }
     }
 
@@ -174,13 +186,18 @@ public class AndyViewPagerActivity extends Activity
     public void onPageSelected(int arg0) {
         // 设置底部小点选中状态
         setCurDot(arg0);
-//        if (arg0 != pics.length - 1) {
-//            button.setVisibility(View.GONE);
-//            ll.setVisibility(View.VISIBLE);
-//        } else {
-//            button.setVisibility(View.VISIBLE);
-//            ll.setVisibility(View.GONE);
-//        }
+        if (arg0 != pics.length - 1) {
+            button.setVisibility(View.GONE);
+            ll.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.GONE);
+        }
+        if (arg0 == 0){
+            tv_jump.setVisibility(View.VISIBLE);
+        } else {
+            tv_jump.setVisibility(View.GONE);
+        }
     }
 
     @Override

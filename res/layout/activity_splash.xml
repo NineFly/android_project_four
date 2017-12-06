@@ -2,7 +2,6 @@
     android:id="@+id/splash_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/welcom_login"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"

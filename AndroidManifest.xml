@@ -46,8 +46,7 @@
             android:windowSoftInputMode="adjustResize">
 
         </activity>
-
-        <activity android:name=".activity.SplashActivity"
+        <activity android:name=".activity.AndyViewPagerActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme">
@@ -56,6 +55,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.SplashActivity"/>
 
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -101,7 +102,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.AndyViewPagerActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
