@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 
 import com.ths.plt.cordova.R;
 
@@ -22,14 +24,17 @@ public class SplashActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
 
+        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
+        AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
+        animation.setDuration(1000);
+        rootLayout.startAnimation(animation);
 
-        // TODO: 2017/11/24 延迟进入主界面
         os.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //进入主页面
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
+                startActivity(new Intent(SplashActivity.this, AndyViewPagerActivity.class));
+                finishNoTransition();
             }
         }, 1500);
     }

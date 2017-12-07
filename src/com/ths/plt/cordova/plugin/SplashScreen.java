@@ -167,7 +167,7 @@ public class SplashScreen extends CordovaPlugin {
         } else if (action.equals("show")) {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
-                    webView.postMessage("splashscreen", "show");
+                    webView.postMessage("splashscreen", "hide");
                 }
             });
         } else {
@@ -217,10 +217,11 @@ public class SplashScreen extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 if (splashDialog != null && splashDialog.isShowing()) {
-                    final int fadeSplashScreenDuration = getFadeDuration();
+//                    final int fadeSplashScreenDuration = getFadeDuration();
+                    final int fadeSplashScreenDuration = 0;
                     // CB-10692 If the plugin is being paused/destroyed,
                     // skip the fading and hide it immediately
-                    if (fadeSplashScreenDuration > 0 && forceHideImmediately == false) {
+                    if (forceHideImmediately == false) {
                         AlphaAnimation fadeOut = new AlphaAnimation(1, 0);
                         fadeOut.setInterpolator(new DecelerateInterpolator());
                         fadeOut.setDuration(fadeSplashScreenDuration);
@@ -266,8 +267,9 @@ public class SplashScreen extends CordovaPlugin {
         final int splashscreenTime = preferences.getInteger("SplashScreenDelay", DEFAULT_SPLASHSCREEN_DURATION);
         final int drawableId = preferences.getInteger("SplashDrawableId", 0);
 
-        final int fadeSplashScreenDuration = getFadeDuration();
-        final int effectiveSplashDuration = Math.max(0, splashscreenTime - fadeSplashScreenDuration);
+//        final int fadeSplashScreenDuration = getFadeDuration();
+//        final int effectiveSplashDuration = Math.max(0, splashscreenTime - fadeSplashScreenDuration);
+        final int effectiveSplashDuration = 0;
 
         lastHideAfterDelay = hideAfterDelay;
 
@@ -314,7 +316,7 @@ public class SplashScreen extends CordovaPlugin {
                 splashDialog.setCancelable(false);
                 splashDialog.show();
 
-                if (preferences.getBoolean("ShowSplashScreenSpinner", true)) {
+                if (preferences.getBoolean("ShowSplashScreenSpinner", false)) {
                     spinnerStart();
                 }
 

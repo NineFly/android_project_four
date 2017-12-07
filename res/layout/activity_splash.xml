@@ -2,7 +2,9 @@
     android:id="@+id/splash_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/screen"
     android:orientation="vertical">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +21,6 @@
         android:typeface="serif"
         android:visibility="gone" />
 
-
     <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
@@ -35,5 +36,12 @@
         android:textSize="20dip"
         android:typeface="serif"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        />
 
 </RelativeLayout>
