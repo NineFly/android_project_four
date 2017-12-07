@@ -5,7 +5,9 @@ exports.show = function(url, title, options) {
     if( title == undefined ) {
       title = '';
     }
-
+    if (imgIndex == undefined){
+        imgIndex = 0;
+    }
     if(typeof options == "undefined"){
         options = {};
     }
