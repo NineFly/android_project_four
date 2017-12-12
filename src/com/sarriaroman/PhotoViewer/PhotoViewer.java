@@ -50,8 +50,14 @@ public class PhotoViewer extends CordovaPlugin {
 
     protected void launchActivity() throws JSONException {
         Intent i = new Intent(this.cordova.getActivity(), com.sarriaroman.PhotoViewer.PhotoActivity.class);
-        String urls = this.args.getString(0);
-        String[] urlArray = urls.split(",");
+        JSONArray urlArr = this.args.getJSONArray(0);
+
+        int len = urlArr.length();
+        String[] urlArray = new String[len];
+        for (int index = 0; index < len; index++) {
+            urlArray[index] = urlArr.getString(index);
+        }
+
         String num = this.args.getString(2);
         int numInt = Integer.parseInt(num);
         String url = urlArray[numInt];

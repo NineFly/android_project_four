@@ -20,9 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eralp.circleprogressview.CircleProgressView;
-import com.shizhefei.view.largeimage.LargeImageView;
-import com.squareup.picasso.Picasso;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.ths.plt.cordova.R;
+import com.ths.plt.cordova.utils.ImagebaseUtils;
+import com.ths.plt.cordova.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -154,7 +157,7 @@ public class PhotoActivity extends Activity implements
 			tempHolder.loadingViewImage = (CircleProgressView) view.findViewById(R.id.loadingView_loading);
 
 			//图片展示的2中方式
-			tempHolder.imageView = (LargeImageView) view.findViewById(R.id.touchImageView);
+			tempHolder.imageView = (ImageView) view.findViewById(R.id.touchImageView);
 
 			// 单击关闭图片预览
 			tempHolder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +171,7 @@ public class PhotoActivity extends Activity implements
 		}
 
 		final String imgUrl = fileUrls[position];
-		loadImage(imgUrl);
+		loadImage(imgUrl,tempHolder);
 //        tempHolder.imageView.setOnLongClickListener(imglongListener);
 
 
@@ -181,43 +184,69 @@ public class PhotoActivity extends Activity implements
 		// TODO: 2017/11/24 加载图片
 	}
 
-	private void loadImage(String imgUrl) {
-		if (imgUrl.startsWith("http")) {
-			Picasso.with(this)
-					.load(imgUrl)
-					.fit()
-					.centerInside()
-					.into(photo, new com.squareup.picasso.Callback() {
+	private void loadImage(final String imgUrl,final ViewHolder tempHolder) {
+			if (imgUrl.startsWith("http")) {
+			//请求网络下载并显示图片
+				ImageLoader.getInstance().displayImage(imgUrl,tempHolder.imageView,
+					ImagebaseUtils.getNullOptions(),new ImageLoadingListener(){
 						@Override
-						public void onSuccess() {
-							hideLoadingAndUpdate();
+						public void onLoadingStarted(String imageUri, View view) {
 						}
 
 						@Override
-						public void onError() {
+						public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
 							Toast.makeText(PhotoActivity.this,
 									"Error loading image.",
 									Toast.LENGTH_LONG).show();
 							finish();
 						}
+
+						@Override
+						public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
+							tempHolder.imageView.setTag(bitmap);
+							hideLoadingAndUpdate();
+						}
+
+						@Override
+						public void onLoadingCancelled(String imageUri, View view) {
+
+						}
 					});
+
+//			Picasso.with(this)
+//					.load(imgUrl)
+//					.fit()
+//					.centerInside()
+//					.into(photo, new com.squareup.picasso.Callback() {
+//						@Override
+//						public void onSuccess() {
+//							hideLoadingAndUpdate();
+//						}
+//
+//						@Override
+//						public void onError() {
+//							Toast.makeText(PhotoActivity.this,
+//									"Error loading image.",
+//									Toast.LENGTH_LONG).show();
+//							finish();
+//						}
+//					});
 		} else if (imgUrl.startsWith("data:image")) {
 			String base64String = imgUrl.substring(imgUrl.indexOf(",") + 1);
 			byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
 			Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
 					decodedString.length);
-			photo.setImageBitmap(decodedByte);
+				tempHolder.imageView.setImageBitmap(decodedByte);
 
 			hideLoadingAndUpdate();
 		} else {
-			photo.setImageURI(Uri.parse(imgUrl));
+				tempHolder.imageView.setImageURI(Uri.parse(imgUrl));
 
 			hideLoadingAndUpdate();
 		}
 	}
 
 	private void hideLoadingAndUpdate() {
-		photo.setVisibility(View.VISIBLE);
 		shareBtn.setVisibility(shareBtnVisibility);
 		mAttacher.update();
 	}
@@ -266,7 +295,7 @@ public class PhotoActivity extends Activity implements
 		//        TextView loadingMsgview;
 		CircleProgressView loadingViewImage;
 		TextView loadingFailedMsgview;
-		LargeImageView imageView;
+		ImageView imageView;
 		//        GifImageView gifImageView;
 		String imageUrl;
 		int position;
