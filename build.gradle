@@ -39,6 +39,7 @@ allprojects {
     repositories {
         mavenCentral();
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -247,13 +248,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
+    compile fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
-    debugCompile project(path: 'CordovaLib', configuration: 'debug')
-    releaseCompile project(path: 'CordovaLib', configuration: 'release')
-    compile 'com.android.support:support-v4:24.1.1+'
+    debugCompile(project(path: "CordovaLib", configuration: "debug"))
+    releaseCompile(project(path: "CordovaLib", configuration: "release"))
+    compile "com.android.support:support-v4:24.1.1+"
     // SUB-PROJECT DEPENDENCIES END
-    compile project(':CordovaLib')
+    compile 'com.shizhefei:LargeImageView:1.0.9'//支持展示高清图片，例如：10000*10000；
+    compile 'com.github.eralpyucel:CircleProgressView:v1.1'//圆形进度条
+
+    compile 'com.github.GrenderG:Toasty:1.2.5'//吐司
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
 
 def promptForReleaseKeyPassword() {

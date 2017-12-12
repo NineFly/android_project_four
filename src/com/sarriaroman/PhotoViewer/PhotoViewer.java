@@ -1,14 +1,14 @@
 package com.sarriaroman.PhotoViewer;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Class to Open PhotoViewer with the Required Parameters from Cordova
@@ -50,10 +50,18 @@ public class PhotoViewer extends CordovaPlugin {
 
     protected void launchActivity() throws JSONException {
         Intent i = new Intent(this.cordova.getActivity(), com.sarriaroman.PhotoViewer.PhotoActivity.class);
+        String urls = this.args.getString(0);
+        String[] urlArray = urls.split(",");
+        String num = this.args.getString(2);
+        int numInt = Integer.parseInt(num);
+        String url = urlArray[numInt];
 
-        i.putExtra("url", this.args.getString(0));
+        i.putExtra("url", url);
+        i.putExtra("INDEX", num);
+        i.putExtra("FILE_URL", urlArray);
+
         i.putExtra("title", this.args.getString(1));
-        i.putExtra("options", this.args.optJSONObject(2).toString());
+        i.putExtra("options", this.args.optJSONObject(3).toString());
 
         this.cordova.getActivity().startActivity(i);
         this.callbackContext.success("");
