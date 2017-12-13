@@ -86,7 +86,7 @@ public class PhotoActivity extends Activity implements
 		}
 
 		mViewPager.setOffscreenPageLimit(1);
-		showPageNumber(currentItem + 1);
+//		showPageNumber(currentItem + 1);
 		adapter = new ThisPageAdapter();
 		mViewPager.setAdapter(adapter);
 		mViewPager.setCurrentItem(currentItem);
@@ -217,6 +217,7 @@ public class PhotoActivity extends Activity implements
 	 * 显示当前页面信息
 	 */
 	private void showPageNumber(int curPage) {
+		currentItem = curPage;
 		// TODO: 2017/11/24 总共有多少张图片,当前显示哪一张图片
 //        totalPage.setText("/" + fileUrls.length);
 //        currentPage.setText("" + curPage);
@@ -237,7 +238,7 @@ public class PhotoActivity extends Activity implements
 
 	@Override
 	public void onPageSelected(int position) {
-		showPageNumber(position + 1);
+		showPageNumber(position);
 	}
 
 	@Override
