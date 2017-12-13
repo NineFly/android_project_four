@@ -60,12 +60,9 @@ public class PhotoViewer extends CordovaPlugin {
 
         String num = this.args.getString(2);
         int numInt = Integer.parseInt(num);
-        String url = urlArray[numInt];
 
-        i.putExtra("url", url);
-        i.putExtra("INDEX", num);
+        i.putExtra("INDEX", numInt);
         i.putExtra("FILE_URL", urlArray);
-
         i.putExtra("title", this.args.getString(1));
         i.putExtra("options", this.args.optJSONObject(3).toString());
 

@@ -25,7 +25,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.ths.plt.cordova.R;
 import com.ths.plt.cordova.utils.ImagebaseUtils;
-import com.ths.plt.cordova.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,6 +78,7 @@ public class PhotoActivity extends Activity implements
 
 	private void initData() {
 		Intent intent = this.getIntent();
+//		分享
 		try {
 			options = new JSONObject(intent.getStringExtra("options"));
 			shareBtnVisibility = options.getBoolean("share") ? View.VISIBLE : View.INVISIBLE;
@@ -86,30 +86,22 @@ public class PhotoActivity extends Activity implements
 			shareBtnVisibility = View.VISIBLE;
 		}
 		shareBtn.setVisibility(shareBtnVisibility);
-
-		// Change the Activity Title
+//		标题
 		String actTitle = intent.getStringExtra("title");
 		if (!actTitle.equals("")) {
 			titleTxt.setText(actTitle);
 		}
-
-//		String imageUrl = intent.getStringExtra("url");
+		currentItem = intent.getIntExtra(INDEX, 0);
         fileUrls = intent.getStringArrayExtra(FILE_URL); //原图URL
-//		fileUrls = new String[]{"1","2","3"}; //原图URL
 		if (currentItem >= fileUrls.length) {
 			currentItem = 0;
 		}
 
 		mViewPager.setOffscreenPageLimit(1);
-		mViewPager.setCurrentItem(currentItem);
 		showPageNumber(currentItem + 1);
-		// 设置当前页面前后，各预加载1个Page。
 		adapter = new ThisPageAdapter();
 		mViewPager.setAdapter(adapter);
-
-		// TODO: 2017/11/22 待完成
-//		mViewPager.setVisibility(View.GONE);
-//		loadImage(imageUrl);
+		mViewPager.setCurrentItem(currentItem);
 	}
 
 	private void initEvent() {
