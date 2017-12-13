@@ -20,10 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eralp.circleprogressview.CircleProgressView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.shizhefei.view.largeimage.LargeImageView;
 import com.ths.plt.cordova.R;
+import com.ths.plt.cordova.imageloader.ImageLoaderParam;
+import com.ths.plt.cordova.imageloader.ImageLoaderService;
 import com.ths.plt.cordova.utils.ImagebaseUtils;
 
 import org.json.JSONException;
@@ -149,7 +151,7 @@ public class PhotoActivity extends Activity implements
 			tempHolder.loadingViewImage = (CircleProgressView) view.findViewById(R.id.loadingView_loading);
 
 			//图片展示的2中方式
-			tempHolder.imageView = (ImageView) view.findViewById(R.id.touchImageView);
+			tempHolder.imageView = (LargeImageView) view.findViewById(R.id.touchImageView);
 
 			// 单击关闭图片预览
 			tempHolder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -161,79 +163,62 @@ public class PhotoActivity extends Activity implements
 			});
 
 		}
-
+		final ViewHolder finalTempHolder = tempHolder;
 		final String imgUrl = fileUrls[position];
-		loadImage(imgUrl,tempHolder);
-//        tempHolder.imageView.setOnLongClickListener(imglongListener);
-
-
-//        tempHolder.imageUrl = imgUrl;
-//        if (ImagebaseUtils.isGif(imgUrl)) {
-//            showGifImage(position, tempHolder, imgUrl);
-//        } else {
-//            showOtherImage(position, tempHolder, imgUrl);
-//        }
-		// TODO: 2017/11/24 加载图片
+		loadImage(imgUrl,tempHolder,new ImageLoadingCompleteListener() {
+			@Override
+			public void onLoadingComplete(String url, View var2, Bitmap var3) {
+				finalTempHolder.imageView.setImage(var3);
+			}
+		});
 	}
 
-	private void loadImage(final String imgUrl,final ViewHolder tempHolder) {
+	/**
+	 * 图片加载完成监听
+	 */
+	interface ImageLoadingCompleteListener {
+		void onLoadingComplete(String var1, View var2, Bitmap var3);
+	}
+
+	private void loadImage(final String imgUrl,final ViewHolder tempHolder, final ImageLoadingCompleteListener listener) {
 			if (imgUrl.startsWith("http")) {
+				ImageLoaderService.getInstance().loadImage(imgUrl, null,
+						ImagebaseUtils.getNullOptions(), new ImageLoadingListener() {
+							@Override
+							public void onLoadingStarted(String imageUri, View view) {
+
+							}
+
+							@Override
+							public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+								Toast.makeText(PhotoActivity.this, "Error loading image.", Toast.LENGTH_LONG).show();
+								finish();
+							}
+
+							@Override
+							public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
+								tempHolder.imageView.setTag(bitmap);
+								listener.onLoadingComplete(imageUri, view, bitmap);
+								hideLoadingAndUpdate();
+							}
+
+							@Override
+							public void onLoadingCancelled(String imageUri, View view) {
+
+							}
+						},null, ImageLoaderParam.getDefaultImageParam());
 			//请求网络下载并显示图片
-				ImageLoader.getInstance().displayImage(imgUrl,tempHolder.imageView,
-					ImagebaseUtils.getNullOptions(),new ImageLoadingListener(){
-						@Override
-						public void onLoadingStarted(String imageUri, View view) {
-						}
 
-						@Override
-						public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-							Toast.makeText(PhotoActivity.this,
-									"Error loading image.",
-									Toast.LENGTH_LONG).show();
-							finish();
-						}
-
-						@Override
-						public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
-							tempHolder.imageView.setTag(bitmap);
-							hideLoadingAndUpdate();
-						}
-
-						@Override
-						public void onLoadingCancelled(String imageUri, View view) {
-
-						}
-					});
-
-//			Picasso.with(this)
-//					.load(imgUrl)
-//					.fit()
-//					.centerInside()
-//					.into(photo, new com.squareup.picasso.Callback() {
-//						@Override
-//						public void onSuccess() {
-//							hideLoadingAndUpdate();
-//						}
-//
-//						@Override
-//						public void onError() {
-//							Toast.makeText(PhotoActivity.this,
-//									"Error loading image.",
-//									Toast.LENGTH_LONG).show();
-//							finish();
-//						}
-//					});
 		} else if (imgUrl.startsWith("data:image")) {
 			String base64String = imgUrl.substring(imgUrl.indexOf(",") + 1);
 			byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
 			Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
 					decodedString.length);
-				tempHolder.imageView.setImageBitmap(decodedByte);
+				tempHolder.imageView.setImage(decodedByte);
 
 			hideLoadingAndUpdate();
 		} else {
-				tempHolder.imageView.setImageURI(Uri.parse(imgUrl));
-
+//				tempHolder.imageView.setImage(Uri.parse(imgUrl));
 			hideLoadingAndUpdate();
 		}
 	}
@@ -287,7 +272,7 @@ public class PhotoActivity extends Activity implements
 		//        TextView loadingMsgview;
 		CircleProgressView loadingViewImage;
 		TextView loadingFailedMsgview;
-		ImageView imageView;
+		LargeImageView imageView;
 		//        GifImageView gifImageView;
 		String imageUrl;
 		int position;
