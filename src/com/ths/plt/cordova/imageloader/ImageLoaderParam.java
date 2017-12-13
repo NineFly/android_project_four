@@ -1,6 +1,16 @@
 package com.ths.plt.cordova.imageloader;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by well on 15/6/1.
@@ -34,6 +44,31 @@ public class ImageLoaderParam {
         return this.loader;
     }
 
+    public Uri getCacheImage(String uri){//这里的uri一般就是图片网址
+        List<String> memCacheKeyNameList = MemoryCacheUtils.findCacheKeysForImageUri(uri , getLoader().getMemoryCache());
+        if(memCacheKeyNameList != null && memCacheKeyNameList.size() > 0){
+            Uri bmpUri = null;
+            try {
+                Bitmap bitmap = getLoader().getMemoryCache().get(memCacheKeyNameList.get(0));
+                File file = new File(
+                        Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_DOWNLOADS
+                        ), "share_image_" + System.currentTimeMillis() + ".png");
+
+                file.getParentFile().mkdirs();
+
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                out.close();
+
+                bmpUri = Uri.fromFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bmpUri;
+        }
+        return null;
+    }
 
 
 

@@ -4,18 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,21 +27,13 @@ import com.ths.plt.cordova.utils.ImagebaseUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoActivity extends Activity implements
 		ViewPager.OnPageChangeListener {
-	private ImageView photo;
-
 	private ImageButton closeBtn;
 	private ImageButton shareBtn;
-	private PhotoViewAttacher mAttacher;
-
+	private ImageLoaderParam mParam = ImageLoaderParam.getDefaultImageParam();
 	private TextView titleTxt;
 	protected ViewPager mViewPager;
 	private JSONObject options;
@@ -73,8 +61,6 @@ public class PhotoActivity extends Activity implements
 		closeBtn = (ImageButton) findViewById(R.id.closeBtn);
 		shareBtn = (ImageButton) findViewById(R.id.shareBtn);
 		mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
-		photo = (ImageView) findViewById(R.id.photoView);
-		mAttacher = new PhotoViewAttacher(photo);
 		titleTxt = (TextView) findViewById(R.id.titleTxt);
 	}
 
@@ -117,8 +103,8 @@ public class PhotoActivity extends Activity implements
 		shareBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Uri bmpUri = getLocalBitmapUri(photo);
-
+				String clickUrl = fileUrls[currentItem];
+				Uri bmpUri = mParam.getCacheImage(clickUrl);
 				if (bmpUri != null) {
 					Intent sharingIntent = new Intent(Intent.ACTION_SEND);
 
@@ -206,7 +192,7 @@ public class PhotoActivity extends Activity implements
 							public void onLoadingCancelled(String imageUri, View view) {
 
 							}
-						},null, ImageLoaderParam.getDefaultImageParam());
+						},null,mParam);
 			//请求网络下载并显示图片
 
 		} else if (imgUrl.startsWith("data:image")) {
@@ -225,37 +211,6 @@ public class PhotoActivity extends Activity implements
 
 	private void hideLoadingAndUpdate() {
 		shareBtn.setVisibility(shareBtnVisibility);
-		mAttacher.update();
-	}
-
-	public Uri getLocalBitmapUri(ImageView imageView) {
-		Drawable drawable = imageView.getDrawable();
-		Bitmap bmp = null;
-
-		if (drawable instanceof BitmapDrawable) {
-			bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-		} else {
-			return null;
-		}
-		// Store image to default external storage directory
-		Uri bmpUri = null;
-		try {
-			File file = new File(
-					Environment.getExternalStoragePublicDirectory(
-							Environment.DIRECTORY_DOWNLOADS
-					), "share_image_" + System.currentTimeMillis() + ".png");
-
-			file.getParentFile().mkdirs();
-
-			FileOutputStream out = new FileOutputStream(file);
-			bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-			out.close();
-
-			bmpUri = Uri.fromFile(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bmpUri;
 	}
 
 	/**
@@ -269,12 +224,9 @@ public class PhotoActivity extends Activity implements
 
 	private class ViewHolder {
 		View loadingView;
-		//        TextView loadingMsgview;
 		CircleProgressView loadingViewImage;
 		TextView loadingFailedMsgview;
 		LargeImageView imageView;
-		//        GifImageView gifImageView;
-		String imageUrl;
 		int position;
 	}
 
