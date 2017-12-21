@@ -78,7 +78,7 @@ public class OpenFile extends CordovaPlugin {
       } else {
         fileIntent.setDataAndType(realUri, mime);
       }
-
+      fileIntent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
       Log.d(TAG, "Starting activity for '" + uri + "'...");
       cordova.getActivity().startActivity(fileIntent);
 
