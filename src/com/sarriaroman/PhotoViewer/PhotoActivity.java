@@ -15,10 +15,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bm.library.PhotoView;
 import com.eralp.circleprogressview.CircleProgressView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.shizhefei.view.largeimage.LargeImageView;
 import com.ths.plt.cordova.R;
 import com.ths.plt.cordova.imageloader.ImageLoaderParam;
 import com.ths.plt.cordova.imageloader.ImageLoaderService;
@@ -137,8 +137,9 @@ public class PhotoActivity extends Activity implements
 			tempHolder.loadingViewImage = (CircleProgressView) view.findViewById(R.id.loadingView_loading);
 
 			//图片展示的2中方式
-			tempHolder.imageView = (LargeImageView) view.findViewById(R.id.touchImageView);
-
+			tempHolder.imageView = (PhotoView) view.findViewById(R.id.touchImageView);
+			// 启用图片缩放功能
+			tempHolder.imageView.enable();
 			// 单击关闭图片预览
 			tempHolder.imageView.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -154,7 +155,7 @@ public class PhotoActivity extends Activity implements
 		loadImage(imgUrl,tempHolder,new ImageLoadingCompleteListener() {
 			@Override
 			public void onLoadingComplete(String url, View var2, Bitmap var3) {
-				finalTempHolder.imageView.setImage(var3);
+				finalTempHolder.imageView.setImageBitmap(var3);
 			}
 		});
 	}
@@ -200,11 +201,11 @@ public class PhotoActivity extends Activity implements
 			byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
 			Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
 					decodedString.length);
-				tempHolder.imageView.setImage(decodedByte);
+				tempHolder.imageView.setImageBitmap(decodedByte);
 
 			hideLoadingAndUpdate();
 		} else {
-//				tempHolder.imageView.setImage(Uri.parse(imgUrl));
+				tempHolder.imageView.setImageURI(Uri.parse(imgUrl));
 			hideLoadingAndUpdate();
 		}
 	}
@@ -227,7 +228,7 @@ public class PhotoActivity extends Activity implements
 		View loadingView;
 		CircleProgressView loadingViewImage;
 		TextView loadingFailedMsgview;
-		LargeImageView imageView;
+		PhotoView imageView;
 		int position;
 	}
 
